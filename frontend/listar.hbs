@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Produtos cadastrados</title>
+    <meta name="description" content="HTML com várias tags semânticas e uma tabela com 10 linhas." />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+<h1>Produtos Cadastrados:</h1>
+<ul>
+    {{#each estoque}}
+        <li>Id do Produto: {{idProduto}}</li>
+        <li>Nome do Produto: {{nomeProduto}}</li>
+        <li>Genero do Produto: {{generoProduto}}</li>
+        <li>Categoria do Produto: {{categoriaProduto}}</li>
+        <li>Quantidade disponível do Produto: {{quantidadeProduto}}</li>
+        <li>Descrição: {{descricaoProduto}}</li>
+        <li>Id do Usuário: {{usuarios_idUsuario}}</li>
+        <hr>
+    {{/each}}
+</ul>
+</body>
+</html>
