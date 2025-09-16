@@ -10,10 +10,23 @@ executarAPI.use(minhaAPI.json())
 executarAPI.use(bodyParser.urlencoded({ extended: false }))
 executarAPI.engine("hbs", exphbs.engine({ // registrando que vai utilizar o handlebars (.hbs)
     extname: ".hbs", 
-    defaultLayout: false  // pra não ter arquivos default
+    defaultLayout: false,  // pra não ter arquivos default
+     helpers: {
+        eq: function(a, b) {
+            return a == b;
+        }
+    }
 }));
 executarAPI.set("view engine", "hbs") //setar automaticamente no render o .hbs
 executarAPI.set("views", path.join(__dirname, "frontend")) //caminho para encontrar sempre o html
+
+executarAPI.use(minhaAPI.static(path.join(__dirname, 'public'), { //onde estão os arquivos estáticos (css, js, imagens, sw.js, manifest.json - dentro da pasta public)
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('manifest.json')) {
+      res.setHeader('Content-Type', 'application/manifest+json');
+    }
+  }
+}));
 
 
 executarAPI.get("/cadastro", (req, res) => { // carregando a view de cadastro
@@ -57,7 +70,46 @@ executarAPI.post('/salvarFormulario', async (request, response) => { //igual est
     }
 })
 
-executarAPI.listen(8080, () => {
+executarAPI.get('/editar/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const produto = await db('estoque').where('idProduto', id).first();
+        res.render('editar', { produto });
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+});
+
+
+executarAPI.post('/editar/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const dados = req.body;
+        await db('estoque').where('idProduto', id).update({
+            nomeProduto: dados.nome,
+            generoProduto: dados.genero,
+            categoriaProduto: dados.categoria,
+            quantidadeProduto: dados.quantidade,
+            descricaoProduto: dados.descricao
+        });
+        res.redirect('/listar');
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+});
+
+
+executarAPI.get('/excluir/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        await db('estoque').where('idProduto', id).del();
+        res.redirect('/listar');
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+});
+
+executarAPI.listen(3030, () => {
     console.log('subiu o servidor')
 })
 

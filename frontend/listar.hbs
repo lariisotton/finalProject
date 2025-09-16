@@ -8,12 +8,25 @@
     <meta name="description" content="HTML com várias tags semânticas e uma tabela com 10 linhas." />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    
+    <script> //service worker - arquivo js que fica rodando em segundo plano responsavel por fazer a aplicação funcionar offline
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(console.error);
+        }
+    </script>
+
+    <link rel="manifest" href="/manifest.json"> {{!--manifest - arquivo json que informa ao navegador que a aplicação é uma PWA --}}
+    <meta name="theme-color" content="#0d6efd">
+    <link rel="icon" href="/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+
 </head>
 
 <body>
-<h1>Produtos Cadastrados:</h1>
-<ul>
-    {{#each estoque}}
+    <a href="/cadastro/">Cadastrar novo</a>
+    <h1>Produtos Cadastrados:</h1>
+    <ul>
+        {{#each estoque}}
         <li>Id do Produto: {{idProduto}}</li>
         <li>Nome do Produto: {{nomeProduto}}</li>
         <li>Genero do Produto: {{generoProduto}}</li>
@@ -21,8 +34,11 @@
         <li>Quantidade disponível do Produto: {{quantidadeProduto}}</li>
         <li>Descrição: {{descricaoProduto}}</li>
         <li>Id do Usuário: {{usuarios_idUsuario}}</li>
+        <a href="/editar/{{idProduto}}">Editar</a>
+        <a href="/excluir/{{idProduto}}">Deletar</a>
         <hr>
-    {{/each}}
-</ul>
+        {{/each}}
+    </ul>
 </body>
+
 </html>
